@@ -34,7 +34,7 @@ jobs:
         run: flutter pub get
 
       - name: Build iOS Simulator app
-        run: flutter build ios --release --simulator --no-codesign
+        run: flutter build ios --simulator --no-codesign
 
       - name: Zip app bundle for simulator preview
         run: |
