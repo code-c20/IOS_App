@@ -1,0 +1,52 @@
+name: Build iOS Simulator App
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "peso_application/**"
+      - ".github/workflows/ios-simulator-app.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: peso_application
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.44.8"
+          channel: stable
+          cache: true
+          cache-key: flutter-3.44.8
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      - name: Build iOS Simulator app
+        run: flutter build ios --release --simulator --no-codesign
+
+      - name: Zip app bundle for simulator preview
+        run: |
+          test -d build/ios/iphonesimulator/Runner.app
+          ditto -c -k --sequesterRsrc --keepParent \
+            build/ios/iphonesimulator/Runner.app \
+            build/ios/WorkNests-iOS-Simulator.zip
+
+      - name: Upload simulator app ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: WorkNests-iOS-Simulator
+          path: peso_application/build/ios/WorkNests-iOS-Simulator.zip
+          if-no-files-found: error
+          retention-days: 14
