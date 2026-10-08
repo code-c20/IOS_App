@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: worknests
+    runtime: static
+    rootDir: peso_application
+    buildCommand: |
+      git clone --depth 1 --branch 3.44.8 https://github.com/flutter/flutter.git /tmp/flutter
+      /tmp/flutter/bin/flutter config --no-analytics --enable-web
+      /tmp/flutter/bin/flutter pub get
+      /tmp/flutter/bin/flutter build web --release --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
+    staticPublishPath: build/web
+    envVars:
+      - key: SUPABASE_ANON_KEY
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
