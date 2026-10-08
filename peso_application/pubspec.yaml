@@ -103,6 +103,10 @@ flutter_icons:
   image_path: "assets/808374285_1073217979015295_1446249263759383185_newww.png"
   adaptive_icon_background: "#0B2A4B"
   adaptive_icon_foreground: "assets/808374285_1073217979015295_1446249263759383185_newww.png"
+  windows:
+    generate: true
+    image_path: "assets/808374285_1073217979015295_1446249263759383185_newww.png"
+    icon_size: 256
 
   # To add assets to your application, add an assets section, like this:
   # assets:

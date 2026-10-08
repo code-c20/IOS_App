@@ -101,11 +101,18 @@ class ResponsiveNavigationShell extends StatelessWidget {
                 Container(
                   width: 42,
                   height: 42,
+                  padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(Icons.business_center, color: accentColor),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(9),
+                    child: Image.asset(
+                      'assets/808374285_1073217979015295_1446249263759383185_newww.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 10),
                 const Expanded(
