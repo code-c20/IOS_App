@@ -92,6 +92,10 @@ void main() {
   testWidgets('employer dashboard renders a branded hiring overview', (
     WidgetTester tester,
   ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+
     final authProvider = AuthProvider();
     final jobProvider = JobProvider();
     final appProvider = ApplicationProvider();
@@ -127,6 +131,14 @@ void main() {
 
     expect(find.textContaining('Hiring overview'), findsOneWidget);
     expect(find.text('Employer'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text('Post Job')).dy,
+      tester.getTopLeft(find.text('Applicants')).dy,
+    );
+    expect(
+      tester.getTopLeft(find.text('New')).dy,
+      tester.getTopLeft(find.text('Shortlisted')).dy,
+    );
   });
 
   testWidgets('employer profile shows live job and applicant totals', (

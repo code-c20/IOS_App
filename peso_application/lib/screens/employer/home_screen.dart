@@ -76,6 +76,11 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
         .where((app) => app.status == AppConstants.statusAccepted)
         .length;
     final recentApplications = appProvider.applications.take(3).toList();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final contentWidth = screenWidth >= 900
+        ? screenWidth - 238 - 8 - 32
+        : screenWidth - 32;
+    final cardWidth = (contentWidth - 12) / 2;
 
     return Scaffold(
       backgroundColor: const Color(AppConstants.backgroundColor),
@@ -296,7 +301,7 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
                         runSpacing: 12,
                         children: [
                           SizedBox(
-                            width: (MediaQuery.of(context).size.width / 2) - 24,
+                            width: cardWidth,
                             child: _EmployerQuickActionCard(
                               label: 'Post Job',
                               icon: Icons.add_circle_outline,
@@ -312,7 +317,7 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: (MediaQuery.of(context).size.width / 2) - 24,
+                            width: cardWidth,
                             child: _EmployerQuickActionCard(
                               label: 'Applicants',
                               icon: Icons.people_alt_rounded,
@@ -335,7 +340,7 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
                         runSpacing: 12,
                         children: [
                           SizedBox(
-                            width: (MediaQuery.of(context).size.width / 2) - 24,
+                            width: cardWidth,
                             child: StatCard(
                               label: 'New',
                               value: newApplications.toString(),
@@ -343,7 +348,7 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: (MediaQuery.of(context).size.width / 2) - 24,
+                            width: cardWidth,
                             child: StatCard(
                               label: 'Shortlisted',
                               value: shortlistedApplications.toString(),
@@ -351,7 +356,7 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: (MediaQuery.of(context).size.width / 2) - 24,
+                            width: cardWidth,
                             child: StatCard(
                               label: 'Hired',
                               value: hiredApplications.toString(),
@@ -359,7 +364,7 @@ class _EmployerHomeScreenState extends State<EmployerHomeScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: (MediaQuery.of(context).size.width / 2) - 24,
+                            width: cardWidth,
                             child: StatCard(
                               label: 'Active',
                               value: activeJobs.toString(),
