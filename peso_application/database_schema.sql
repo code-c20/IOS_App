@@ -1478,8 +1478,8 @@ $$;
 create table if not exists public.applications (
     id uuid primary key default gen_random_uuid(),
     job_id uuid not null references public.jobs(id) on delete cascade,
-    job_title_snapshot text not null,
     job_seeker_id uuid not null references public.job_seekers(id) on delete cascade,
+    job_title_snapshot text not null,
     job_seeker_name_snapshot text not null,
     status text not null default 'new'
         check (status in (
@@ -2073,10 +2073,10 @@ $$;
 
 create table if not exists public.app_policies (
     id uuid primary key default gen_random_uuid(),
+    created_by uuid references public.admins(id) on delete set null,
     policy_key text not null unique default 'default',
     title text not null,
     body text not null,
-    created_by uuid references public.admins(id) on delete set null,
     created_by_user_id_snapshot uuid,
     updated_at timestamptz not null default now()
 );
@@ -2084,12 +2084,14 @@ create table if not exists public.app_policies (
 create table if not exists public.reports (
     id uuid primary key default gen_random_uuid(),
     reporter_id uuid not null references public.users(auth_user_id) on delete cascade,
+    subject_job_id uuid references public.jobs(id) on delete set null,
+    subject_user_id uuid references public.users(auth_user_id) on delete set null,
+    reviewed_by_admin_id uuid references public.admins(id) on delete set null,
     report_type text not null constraint reports_type_valid
         check (report_type in ('job_report', 'applicant_violation', 'user_report', 'other')),
-    subject_job_id uuid references public.jobs(id) on delete set null,
     subject_job_id_snapshot uuid,
-    subject_user_id uuid references public.users(auth_user_id) on delete set null,
     subject_user_id_snapshot uuid,
+    reviewed_by_admin_id_snapshot uuid,
     title text not null,
     description text not null,
     status text not null default 'pending' constraint reports_status_valid
@@ -2106,8 +2108,6 @@ create table if not exists public.reports (
     admin_notes text,
     created_at timestamptz not null default now(),
     reviewed_at timestamptz,
-    reviewed_by_admin_id uuid references public.admins(id) on delete set null,
-    reviewed_by_admin_id_snapshot uuid,
     constraint reports_subject_matches_type check (
         (report_type = 'job_report'
             and subject_user_id is null)
