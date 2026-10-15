@@ -85,6 +85,9 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
     );
     final profileCompletion = _profileCompletionPercentage();
     final recentApplications = appProvider.applications.take(3).toList();
+    final viewportWidth = MediaQuery.sizeOf(context).width;
+    final navigationRailWidth = viewportWidth >= 900 ? 246.0 : 0.0;
+    final dashboardCardWidth = (viewportWidth - navigationRailWidth - 44) / 2;
 
     return Scaffold(
       backgroundColor: const Color(AppConstants.backgroundColor),
@@ -338,7 +341,7 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
                   runSpacing: 12,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 - 24,
+                      width: dashboardCardWidth,
                       child: _QuickActionCard(
                         label: 'Search Jobs',
                         icon: Icons.search,
@@ -348,7 +351,7 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 - 24,
+                      width: dashboardCardWidth,
                       child: _QuickActionCard(
                         label: 'Applications',
                         icon: Icons.folder_outlined,
@@ -366,7 +369,7 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
                   runSpacing: 12,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 - 24,
+                      width: dashboardCardWidth,
                       child: _StatusCard(
                         label: 'Applied',
                         count: appliedCount,
@@ -374,7 +377,7 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 - 24,
+                      width: dashboardCardWidth,
                       child: _StatusCard(
                         label: 'Saved',
                         count: savedJobsCount,
@@ -382,7 +385,7 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 - 24,
+                      width: dashboardCardWidth,
                       child: _StatusCard(
                         label: 'Shortlisted',
                         count: shortlistedCount,
@@ -390,7 +393,7 @@ class _JobSeekerHomeScreenState extends State<JobSeekerHomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 - 24,
+                      width: dashboardCardWidth,
                       child: _StatusCard(
                         label: 'Pending',
                         count: pendingCount,
