@@ -511,6 +511,11 @@ class _CreateUserScreenState extends State<_CreateUserScreen> {
   String _formatCreateUserError(Object error) {
     final text = error.toString().toLowerCase();
 
+    if (text.contains('function not found') ||
+        (text.contains('admin-create-user') && text.contains('404'))) {
+      return 'Account creation is not available because the admin-create-user Supabase function is not deployed. Deploy it with: supabase functions deploy admin-create-user';
+    }
+
     if (text.contains('failed host lookup') ||
         text.contains('no address associated with hostname') ||
         text.contains('socketexception') ||
@@ -521,11 +526,13 @@ class _CreateUserScreenState extends State<_CreateUserScreen> {
       return 'Unable to connect to the service. Please check your internet connection and try again.';
     }
 
-    if (text.contains('permission denied') ||
-        text.contains('row level security') ||
-        text.contains('policy') ||
-        text.contains('rls')) {
-      return 'The admin account creation is blocked by the database policy. Please update the Supabase users policy to allow admin inserts.';
+    if (text.contains('active administrator access is required') ||
+        text.contains('sign in as an administrator')) {
+      return 'Your active administrator access could not be verified. Sign in with an active admin account and try again.';
+    }
+
+    if (text.contains('administrator profile is missing')) {
+      return 'Your admin account is missing its administrator profile. Apply the latest database_schema.sql in Supabase, then try again.';
     }
 
     if (text.contains('duplicate') || text.contains('already exists')) {
@@ -534,6 +541,10 @@ class _CreateUserScreenState extends State<_CreateUserScreen> {
 
     if (text.contains('invalid') || text.contains('password')) {
       return 'The admin account details could not be accepted. Please review the email and password.';
+    }
+
+    if (error is StateError && error.message.isNotEmpty) {
+      return error.message;
     }
 
     return 'Failed to create user. Please try again.';
@@ -557,7 +568,7 @@ class _CreateUserScreenState extends State<_CreateUserScreen> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Add a job seeker or employer account from the admin portal.',
+                'Create a job seeker, employer, or admin account from the admin portal.',
                 style: TextStyle(fontSize: 14, color: Colors.black54),
               ),
               const SizedBox(height: 24),
@@ -677,7 +688,7 @@ class _CreateUserScreenState extends State<_CreateUserScreen> {
                         Text(
                           _selectedRole == AppConstants.roleAdmin
                               ? 'You are creating a new admin account. Make sure this user should have full platform access.'
-                              : 'Create a job seeker, employer, or admin account from the admin portal.',
+                              : 'Create a job seeker or employer account from the admin portal.',
                           style: const TextStyle(
                             fontSize: 13,
                             color: Colors.black54,

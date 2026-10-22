@@ -119,15 +119,24 @@ class SupabaseService {
     required String name,
     required String role,
   }) async {
-    final response = await _client.functions.invoke(
-      'admin-create-user',
-      body: {
-        'email': email.trim(),
-        'password': password,
-        'name': name.trim(),
-        'role': role,
-      },
-    );
+    late final supabase.FunctionResponse response;
+    try {
+      response = await _client.functions.invoke(
+        'admin-create-user',
+        body: {
+          'email': email.trim(),
+          'password': password,
+          'name': name.trim(),
+          'role': role,
+        },
+      );
+    } on supabase.FunctionException catch (error) {
+      final details = error.details;
+      if (details is Map && details['error'] is String) {
+        throw StateError(details['error'] as String);
+      }
+      rethrow;
+    }
     final data = response.data;
     if (data is! Map || data['user_id'] is! String) {
       throw const FormatException(

@@ -226,11 +226,13 @@ session with which to insert rows under RLS. The migration also backfills
 existing seeker/employer Auth accounts that have role metadata but no public
 account/profile.
 
-Public signup accepts only `job_seeker` and `employer`. Admin account creation
-is restricted to the `admin-create-user` Edge Function, which checks the
-authenticated caller's active admin profile before using the Auth Admin API.
-Deploy it with `supabase functions deploy admin-create-user`; do not place the
-service-role key in the mobile app.
+Public signup accepts only `job_seeker` and `employer`. Admins can provision
+job-seeker, employer, and admin accounts through the `admin-create-user` Edge
+Function, which checks the authenticated caller's active admin profile before
+using the Auth Admin API. Apply `database_schema.sql` to install the account
+provisioning trigger, then deploy the function with
+`supabase functions deploy admin-create-user`; do not place the service-role
+key in the mobile app.
 
 For confirmation links to return to the app, add `worknest://email-verified`
 and the deployed web callback URL ending in `/#/email-verified` to Supabase
